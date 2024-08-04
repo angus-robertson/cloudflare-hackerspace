@@ -6,7 +6,7 @@ CREATE TABLE `challenges` (
 	`created_at` text DEFAULT (current_timestamp) NOT NULL,
 	`updated_at` text DEFAULT (current_timestamp) NOT NULL
 );
-
+--> statement-breakpoint
 CREATE UNIQUE INDEX `challenges_name_unique` ON `challenges` (`name`);--> statement-breakpoint
 CREATE UNIQUE INDEX `name_idx` ON `challenges` (`name`);--> statement-breakpoint
 CREATE INDEX `approved_idx` ON `challenges` (`approved`);

@@ -1,7 +1,7 @@
 import { Lucia } from "lucia";
 import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
 import { env } from "hono/adapter";
-import type { InferInsertModel } from "drizzle-orm";
+import type { InferSelectModel } from "drizzle-orm";
 import type { Context } from "hono";
 
 import type { Env } from "@server/env";
@@ -24,6 +24,8 @@ export const initializeLucia = (c: Context<Env>) => {
         return {
           id: attributes.id,
           email: attributes.email,
+          firstName: attributes.firstName,
+          lastName: attributes.lastName,
         };
       },
     });
@@ -34,7 +36,7 @@ export const initializeLucia = (c: Context<Env>) => {
   return lucia;
 };
 
-export type DatabaseUserAttributes = InferInsertModel<typeof usersTable>;
+export type DatabaseUserAttributes = Omit<InferSelectModel<typeof usersTable>, "password">;
 
 export const hashPassword = async (password: string, providedSalt?: Uint8Array): Promise<string> => {
   const encoder = new TextEncoder();

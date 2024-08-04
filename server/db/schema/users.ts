@@ -8,6 +8,8 @@ export const usersTable = sqliteTable(
   {
     id: text("id").notNull().primaryKey(),
     email: text("email").notNull().unique(),
+    firstName: text("first_name").notNull(),
+    lastName: text("last_name").notNull(),
     password: text("password").notNull(),
   },
   (table) => ({

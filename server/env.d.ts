@@ -23,4 +23,7 @@ declare module "lucia" {
     DatabaseUserAttributes: DatabaseUserAttributes;
   }
 }
-export { Environment as Env };
+
+type TUser = User & DatabaseUserAttributes;
+
+export { Environment as Env, TUser as User };

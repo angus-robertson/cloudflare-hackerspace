@@ -41,21 +41,33 @@ export const authHandler = new Hono<Env>()
         append: true,
       });
 
-      return c.body(null, StatusCodes.OK);
+      return c.json(
+        {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
+        StatusCodes.OK
+      );
     }
   )
   .post(
     "/signup",
-    zValidator("json", selectUserSchema.pick({ email: true, password: true }), (result, c) => {
+    zValidator("json", selectUserSchema.pick({ email: true, password: true, firstName: true, lastName: true }), (result, c) => {
       if (!result.success) {
-        return c.json({ error: "invalid/missing email or password" }, StatusCodes.BAD_REQUEST);
+        return c.json({ error: "invalid or missing email, password, firstname or lastname" }, StatusCodes.BAD_REQUEST);
       }
     }),
     async (c) => {
       const db = c.get("db");
       const lucia = c.get("lucia");
 
-      const { email, password } = c.req.valid("json");
+      const { email, password, firstName, lastName } = c.req.valid("json");
+      console.log("email: ", email);
+      console.log("password: ", password);
+      console.log("firstName: ", firstName);
+      console.log("lastName: ", lastName);
 
       const hashedPassword = await hashPassword(password);
       const id = generateIdFromEntropySize(16);
@@ -63,7 +75,9 @@ export const authHandler = new Hono<Env>()
       try {
         await db.insert(users).values({
           id: id,
-          email: email,
+          email,
+          firstName,
+          lastName,
           password: hashedPassword,
         });
 
@@ -74,7 +88,15 @@ export const authHandler = new Hono<Env>()
           append: true,
         });
 
-        return c.body(null, StatusCodes.OK);
+        return c.json(
+          {
+            id,
+            email,
+            firstName,
+            lastName,
+          },
+          StatusCodes.OK
+        );
       } catch (err) {
         console.log("Error: ", err);
 

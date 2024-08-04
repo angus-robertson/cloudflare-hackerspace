@@ -7,9 +7,11 @@ CREATE TABLE `sessions` (
 --> statement-breakpoint
 CREATE TABLE `users` (
 	`id` text PRIMARY KEY NOT NULL,
-	`email` text,
-	`password` text
+	`email` text NOT NULL,
+	`first_name` text NOT NULL,
+	`last_name` text NOT NULL,
+	`password` text NOT NULL
 );
-
+--> statement-breakpoint
 CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);--> statement-breakpoint
 CREATE UNIQUE INDEX `email_idx` ON `users` (`email`);
