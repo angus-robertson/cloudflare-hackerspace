@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 
 import "./index.css";
 
-import { AuthProvider, RouteGuard } from "@client/context/auth";
+import { RouteGuard } from "@client/context/auth";
 
 import { Layout } from "./pages/_layout";
 import { HomePage } from "./pages/home";
@@ -28,16 +28,14 @@ const queryClient = new QueryClient({
 render(
   () => (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Router root={Layout}>
-          <Route path="/login" component={SignInPage} />
-          <Route path="/register" component={SignUpPage} />
-          <Route path="/" component={RouteGuard}>
-            <Route path="/dashboard" component={DashboardPage} />
-          </Route>
-          <Route path="/" component={HomePage} />
-        </Router>
-      </AuthProvider>
+      <Router root={Layout}>
+        <Route path="/login" component={SignInPage} />
+        <Route path="/register" component={SignUpPage} />
+        <Route path="/" component={RouteGuard}>
+          <Route path="/dashboard" component={DashboardPage} />
+        </Route>
+        <Route path="/" component={HomePage} />
+      </Router>
     </QueryClientProvider>
   ),
   document.getElementById("root")!
