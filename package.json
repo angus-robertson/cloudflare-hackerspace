@@ -4,16 +4,38 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev:build": "tsc -b && vite build --watch",
+    "dev:wrangler": "wrangler pages dev ./dist --live-reload",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply hackerspace-prod-db --local",
+    "db:migrate:prod": "wrangler d1 migrations apply hackerspace-prod-db --remote",
+    "db:migrate:preview": "wrangler d1 migrations apply --env preview hackerspace-preview-db --remote",
+    "db:studio:local": "LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print0 | xargs -0 ls -t | head -1) drizzle-kit studio",
+    "db:studio:preview": "env-cmd -e preview drizzle-kit studio",
+    "db:studio:prod": "env-cmd -e prod drizzle-kit studio"
   },
   "dependencies": {
-    "solid-js": "^1.8.18"
+    "@lucia-auth/adapter-drizzle": "^1.0.7",
+    "drizzle-orm": "^0.32.1",
+    "hono": "^4.5.3",
+    "lucia": "^3.2.0",
+    "solid-js": "^1.8.18",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240725.0",
+    "@hono/zod-validator": "^0.2.2",
+    "@types/node": "^22.0.2",
+    "better-sqlite3": "^11.1.2",
+    "drizzle-kit": "^0.23.1",
+    "drizzle-zod": "^0.5.1",
+    "env-cmd": "^10.1.0",
+    "http-status-codes": "^2.3.0",
     "typescript": "^5.2.2",
     "vite": "^5.3.4",
-    "vite-plugin-solid": "^2.10.2"
+    "vite-plugin-solid": "^2.10.2",
+    "wrangler": "^3.68.0"
   }
 }
